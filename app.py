@@ -18,25 +18,25 @@ def select():
     option = data["option"]
     data = request.get_json() 
     option = data["option"]
-    if option == options[0]:
+    if option == option[0]:
         message = "Participant 1, 2, 3."
-    elif option==options[1]:
+    elif option==option[1]:
         message = "participants 1,2,3"
-    elif option == options[2]:
+    elif option == option[2]:
         message = "participants 1,2,3,"
-    elif option == options[3]:
+    elif option == option[3]:
         message = "add a participant"
-    elif option == options[4]:
+    elif option == option[4]:
         message = "remove a participant"
-    elif option == options[5]:
+    elif option == option[5]:
         message =  "clear"
-    elif option == options[6]:
+    elif option == option[6]:
         message = "remove participants without subscription"
-    elif option == options[7]:
+    elif option == option[7]:
         message = "number of participants in each level"
-    elif option == options[8]:
+    elif option == option[8]:
         message = "participants for each dance type"
-    elif option == options[9]:
+    elif option == option[9]:
         message = "participants for a specific dance type"
     elif option == option[10]:
         message = "exit"
@@ -44,3 +44,8 @@ def select():
         message = "please select an option"
     return {"message":message}
     
+@app.route("/submit", methods=["POST"])
+def submit():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    return f"Name: {name}<br>Email: {email}"
