@@ -25,7 +25,7 @@
 
     <h1>Select an option</h1>
 
-<select id="myDropdown"> <option value="">-- Choose an option --</option> {% for option in options %} <option value="{{ option }}">{{ option }}</option> {% endfor %} </select>
+<selectm id="myDropdown"> <option value="">-- Choose an option --</option> {% for option in options %} <option value="{{ option }}">{{ option }}</option> {% endfor %} </select>
 
 
     <p id="result"></p>
@@ -34,12 +34,21 @@
     <script>
         const dropdown = document.getElementById("myDropdown");
         const selectedOption = document.getElementById("selectedOption");
-// Show selection on screen
+        const result = document.getElementById("result");
+         const participantField = document.getElementById("participantField");
+        // Show selection on screen
         dropdown.addEventListener("change", function() {
             selectedOption.textContent = dropdown.value;
         });
         // Send selection to Flask fetch("/select", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ option: dropdown.value }) }) .then(response => response.json()) .then(data => { result.textContent = data.message; });
-        
+      dropdown.addEventListener("change", function() { 
+        selectedOption.textContent = dropdown.value; 
+        fetch("/select", 
+        { method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ option: dropdown.value }) }) .then(response => response.json()) .then(data => 
+      { result.textContent = data.message; if (data.show_field) { participantField.style.display = "block"; } else 
+      { participantField.style.display = "none"; } }); });  
        
 
     </script>
@@ -56,17 +65,6 @@
     </form>
     </div>
 
-   <!--<div class="container mt-3">
-  <h2>Background Color with Contrasting Text Color</h2>
-  <p class="text-bg-primary">This text is important.</p>
-  <p class="text-bg-success">This text indicates success.</p>
-  <p class="text-bg-info">This text represents some information.</p>
-  <p class="text-bg-warning">This text represents a warning.</p>
-  <p class="text-bg-danger">This text represents danger.</p>
-  <p class="text-bg-secondary">Secondary background color.</p>
-  <p class="text-bg-dark">Dark grey background color.</p>
-  <p class="text-bg-light">Light grey background color.</p> 
-   -->
 
 </div>
 </body>
