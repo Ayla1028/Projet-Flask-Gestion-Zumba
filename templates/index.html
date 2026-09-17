@@ -73,23 +73,50 @@
 
       <br><br>
 
-     
+      <form action="/action_page.php">
+        <label for="birthday">Date of Birth:</label>
+        <input type="date" id="birthday" name="birthday">
+        <input type="submit">
+      </form>
+      <br>
+
+     <label>Gender</label>
+     <br>
+
      <input type="radio" id="girl" name="gender" value="girl">
      <label for="girl">girl</label><br>
       <input type="radio" id="boy" name="gender" value="boy">
      <label for="boy">boy</label><br>
       <input type="radio" id="non binary" name="gender" value="non binary">
-     <label for="non binary">non binary</label><br>
+     <label for="non binary">non binary</label>
+     <br><br>
+
+<label>Choose a level</label>
+
+<br>
+
+     <select id="myDropdown">
+      <option value="">-- Choose a level --</levels>
+
+
+      {% for levels in levels %}
+      <option value="{{ levels }}">{{ levels }}</levels>
+      {% endfor %}
+     </select>
+
+      <br><br>
+      <select id="myDropdown">
+      <option value="">-- Choose a dance types --</danceTypes>
+
+
+      {% for danceTypes
+      <option value="{{ danceTypes }}">{{ danceTypes }}</danceTypes>
+      {% endfor %}
+     </select>
 
 
       <br><br>
 
-
-      <label>Email:</label>
-      <input type="email" name="email">
-
-
-      <br><br>
 
 
       <button type="submit">Submit</button>
