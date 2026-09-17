@@ -3,14 +3,21 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 
 options = ["View participants", "View details", "View participant details",
-               "add participant","remove participant","clear","remove participants without subscription",
+               "add participant","remove participant","remove participants without subscription",
                "number of participants in each level","participants for each dance type",
-               "participants for a specific dance type","exit"
+               "participants for a specific dance type"
                ]
+
+levels = ["beginner","intermediaire","advanced"]
+
+danceTypes = ["bachata","salsa","Hip Hop", "Ballet","Breakdance","Regatton","Afrobeat","Cumbia","Merengue"]
+
 
 @app.route("/")
 def home():
-    return render_template("index.html", options=options)
+    return render_template("index.html", options=options, levels=levels, danceTypes = danceTypes)
+
+
 
 
 
@@ -26,12 +33,9 @@ def select():
     elif option == options[2]:
         message = "participants 1,2,3,"
     elif option == options[3]:
-        message = "add a participant"
-        print(message)
         # ADDED BY CLAUDIA
         show_add_form = True
         return {
-        "message": message,
         "show_text_field": False,
         "show_add_form": show_add_form
         
@@ -40,17 +44,13 @@ def select():
     elif option == options[4]:
         message = "remove a participant"
     elif option == options[5]:
-        message =  "clear"
-    elif option == options[6]:
         message = "remove participants without subscription"
-    elif option == options[7]:
+    elif option == options[6]:
         message = "number of participants in each level"
-    elif option == options[8]:
+    elif option == options[7]:
            message = "participants for each dance type"
-    elif option == options[9]:
+    elif option == options[8]:
         message = "participants for a specific dance type"
-    elif option == options[10]:
-        message = "exit"
     else:
         message = "please select an option"
     return {"message":message,"show_text_field": show_text_field}
