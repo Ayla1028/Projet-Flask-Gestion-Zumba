@@ -1,425 +1,152 @@
-<!DOCTYPE html>
-<html>
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+options = [
+    "View participants",
+    "View details",
+    "View participant details",
+    "add participant",
+    "remove participant",
+    "remove participants without subscription",
+    "number of participants in each level",
+    "participants for each dance type",
+    "participants for a specific dance type"
+]
+
+levels = [
+    "beginner",
+    "intermediaire",
+    "advanced"
+]
+
+danceTypes = [
+    "bachata",
+    "salsa",
+    "Hip Hop",
+    "Ballet",
+    "Breakdance",
+    "Regatton",
+    "Afrobeat",
+    "Cumbia",
+    "Merengue"
+]
+
+participants = [
+    {
+        "name": "Alice",
+        "age": 25,
+        "birthday": "2001-05-10",
+        "gender": "girl",
+        "level": "beginner",
+        "danceType": "salsa"
+    },
+    {
+        "name": "Bob",
+        "age": 30,
+        "birthday": "1996-03-15",
+        "gender": "boy",
+        "level": "advanced",
+        "danceType": "bachata"
+    },
+    {
+        "name": "Sarah",
+        "age": 22,
+        "birthday": "2004-08-20",
+        "gender": "girl",
+        "level": "intermediaire",
+        "danceType": "Hip Hop"
+    }
+]
+
+
+
+@app.route("/")
+def home():
+    return render_template(
+        "index.html",
+        options=options,
+        levels=levels,
+        danceTypes=danceTypes
+    )
+
+
+@app.route("/select", methods=["POST"])
+def select():
+
+    data = request.get_json()
+    option = data["option"]
+
+
+    show_add_form = False
+    show_participants = False
+    show_field = False
+
+    if option == options[0]:
+        message = "here are all the participants"
+        show_participants = True
+
+    elif option == options[1]:
+        message = "Participants 1, 2, 3."
+
+    elif option == options[2]:
+        message = "Participants 1, 2, 3."
+
+    elif option == options[3]:
+        message = "Enter the new participant's information."
+        show_add_form = True
+
+    elif option == options[4]:
+        message = "Remove a participant."
+
+    elif option == options[5]:
+        message = "Remove participants without subscription."
 
-<head>
+    elif option == options[6]:
+        message = "Number of participants in each level."
 
-    <title>My Form</title>
+    elif option == options[7]:
+        message = "Participants for each dance type."
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    elif option == options[8]:
+        message = "Participants for a specific dance type."
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    else:
+        message = "Please select an option."
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
-    </script>
-
-</head>
-
-
-<body class="bg-info">
-
-
-    <div class="text-center p-5">
-
-        <h1>Welcome to Zumba Class</h1>
-
-        <p>
-            Please Choose one of the following options
-        </p>
-
-    </div>
-
-
-    <div class="container">
-
-
-        <h1>Select an option</h1>
-
-
-        <!-- MAIN DROPDOWN -->
-
-        <select id="mainDropdown">
-
-            <option value="">
-                -- Choose an option --
-            </option>
-
-            {% for option in options %}
-
-                <option value="{{ option }}">
-                    {{ option }}
-                </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <p>
-
-            Selected option:
-
-            <span id="selectedOption"></span>
-
-        </p>
-
-
-        <p id="result"></p>
-
-
-
-        <!-- ADD PARTICIPANT FORM -->
-
-        <form id="addParticipantForm"
-              action="/submit"
-              method="POST"
-              style="display: none;">
-
-
-            <h2>Add Participant</h2>
-
-
-            <!-- AGE -->
-
-            <label for="age">
-                Age of new participant:
-            </label>
-
-            <input type="text"
-                   id="age"
-                   name="age">
-
-
-            <br>
-            <br>
-
-
-            <!-- NAME -->
-
-            <label for="name">
-                Name:
-            </label>
-
-            <input type="text"
-                   id="name"
-                   name="name">
-
-
-            <br>
-            <br>
-
-
-            <!-- DATE OF BIRTH -->
-
-            <label for="birthday">
-                Date of Birth:
-            </label>
-
-            <input type="date"
-                   id="birthday"
-                   name="birthday">
-
-
-            <br>
-            <br>
-
-
-            <!-- GENDER -->
-
-            <label>
-                Gender:
-            </label>
-
-            <br>
-
-
-            <input type="radio"
-                   id="girl"
-                   name="gender"
-                   value="girl">
-
-            <label for="girl">
-                Girl
-            </label>
-
-
-            <br>
-
-
-            <input type="radio"
-                   id="boy"
-                   name="gender"
-                   value="boy">
-
-            <label for="boy">
-                Boy
-            </label>
-
-
-            <br>
-
-
-            <input type="radio"
-                   id="nonbinary"
-                   name="gender"
-                   value="non binary">
-
-            <label for="nonbinary">
-                Non-binary
-            </label>
-
-
-            <br>
-            <br>
-
-
-
-            <!-- LEVEL -->
-
-            <label for="levelDropdown">
-                Choose a level:
-            </label>
-
-            <br>
-
-            <select id="levelDropdown"
-                    name="level">
-
-                <option value="">
-                    -- Choose a level --
-                </option>
-
-                {% for level in levels %}
-
-                    <option value="{{ level }}">
-                        {{ level }}
-                    </option>
-
-                {% endfor %}
-
-            </select>
-
-
-            <br>
-            <br>
-
-
-
-            <!-- DANCE TYPE -->
-
-            <label for="danceTypeDropdown">
-                Choose a dance type:
-            </label>
-
-            <br>
-
-            <select id="danceTypeDropdown"
-                    name="danceType">
-
-                <option value="">
-                    -- Choose a dance type --
-                </option>
-
-                {% for danceType in danceTypes %}
-
-                    <option value="{{ danceType }}">
-                        {{ danceType }}
-                    </option>
-
-                {% endfor %}
-
-            </select>
-
-
-            <br>
-            <br>
-
-
-
-            <!-- SUBMIT -->
-
-            <button type="submit">
-                Submit
-            </button>
-
-
-        </form>
-<div id="participantsTable"
-     style="display: none; margin-top: 30px;">
-
-    <h2>Participants</h2>
-
-    <table class="table table-bordered table-striped">
-
-        <thead>
-
-            <tr>
-
-                <th>Name</th>
-                <th>Age</th>
-                <th>Date of Birth</th>
-                <th>Gender</th>
-                <th>Level</th>
-                <th>Dance Type</th>
-
-            </tr>
-
-        </thead>
-
-
-        <tbody id="participantsTableBody">
-
-        </tbody>
-
-    </table>
-
-</div>
-
-    </div>
-
-
-
-    <script>
-
-
-        // Main dropdown
-
-        const dropdown =
-            document.getElementById("mainDropdown");
-
-
-        // Selected option text
-
-        const selectedOption =
-            document.getElementById("selectedOption");
-
-
-        // Result message
-
-        const result =
-            document.getElementById("result");
-
-
-        // Add participant form
-
-        const addParticipantForm =
-            document.getElementById("addParticipantForm");
-
-        //participants information
-            
-        const participantsTable = document.getElementById("participantsTable");
-        const participantsTableBody = document.getElementById("participantsTableBody");
-
-
-        // When the user chooses an option
-
-        dropdown.addEventListener("change", function () {
-
-
-            // Display selected option
-
-            selectedOption.textContent =
-                dropdown.value;
-
-
-
-            // Send selected option to Flask
-
-            fetch("/select", {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    option: dropdown.value
-
-                })
-
-            })
-
-
-            .then(response => response.json())
-
-
-
-            .then(data => {
-
-
-                // Display Flask message
-
-                result.textContent =
-                    data.message;
-
-// Show Add Participant form 
-if (data.show_add_form) 
-{ addParticipantForm.style.display = "block"; }
- else { addParticipantForm.style.display = "none"; }
-
-                // Show Add Participant form
-                // Show participants table
-
-    if (data.show_participants) {
-
-        participantsTable.style.display = "block";
-
-
-        participantsTableBody.innerHTML = "";
-
-
-        data.participants.forEach(function(participant) {
-
-            const row = document.createElement("tr");
-
-
-            row.innerHTML = `
-                <td>${participant.name}</td>
-                <td>${participant.age}</td>
-                <td>${participant.birthday}</td>
-                <td>${participant.gender}</td>
-                <td>${participant.level}</td>
-                <td>${participant.danceType}</td>
-            `;
-
-
-            participantsTableBody.appendChild(row);
-
-        });
-
-    } else {
-
-        participantsTable.style.display = "none";
-
+    return {
+        "message": message,
+        "show_field": show_field,
+        "show_add_form": show_add_form,
+        "show_participants":show_participants
     }
 
-                if (data.show_add_form) {
 
-                    addParticipantForm.style.display =
-                        "block";
+@app.route("/submit", methods=["POST"])
+def submit():
 
-                }
+    name = request.form.get("name")
+    age = request.form.get("age")
+    birthday = request.form.get("birthday")
+    gender = request.form.get("gender")
+    level = request.form.get("level")
+    danceType = request.form.get("danceType")
 
-                else {
+    return f"""
+        <h1>Participant Added</h1>
 
-                    addParticipantForm.style.display =
-                        "none";
+        <p><strong>Name:</strong> {name}</p>
+        <p><strong>Age:</strong> {age}</p>
+        <p><strong>Date of Birth:</strong> {birthday}</p>
+        <p><strong>Gender:</strong> {gender}</p>
+        <p><strong>Level:</strong> {level}</p>
+        <p><strong>Dance Type:</strong> {danceType}</p>
 
-                }
+        <br>
 
-            });
-
-
-        });
+        <a href="/">Return to home</a>
+    """
 
 
-    </script>
-
-
-</body>
-
-</html>
+if __name__ == "__main__":
+    app.run(debug=True)
