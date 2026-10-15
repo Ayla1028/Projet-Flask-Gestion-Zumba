@@ -84,10 +84,11 @@ def select():
 
     if option == options[0]:
         message = "here are all the participants"
-        show_participants = True
+        #show_participants = True
     
 
     elif option == options[1]:
+        message = "here are all the participants"
         show_participants = True
 
     elif option == options[2]:
