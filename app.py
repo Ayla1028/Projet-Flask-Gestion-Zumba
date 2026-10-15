@@ -85,9 +85,10 @@ def select():
     if option == options[0]:
         message = "here are all the participants"
         show_participants = True
+    
 
     elif option == options[1]:
-        message = "Participants 1, 2, 3."
+        show_participants = True
 
     elif option == options[2]:
         message = "Participants 1, 2, 3."
@@ -118,7 +119,8 @@ def select():
         "message": message,
         "show_field": show_field,
         "show_add_form": show_add_form,
-        "show_participants":show_participants
+        "show_participants":show_participants,
+        "participants":participants
     }
 
 
